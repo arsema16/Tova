@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;500;800&family=Noto+Sans+Ethiopic:wght@400;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #ffffff;
+  color: #1a1a1a;
+  font-family: 'Plus Jakarta Sans', 'Noto Sans Ethiopic', sans-serif;
+  overflow-x: hidden;
+  cursor: none; /* We will create a custom cursor */
+}
+
+/* Custom Cursor */
+.custom-cursor {
+  width: 20px;
+  height: 20px;
+  background: #0066FF;
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: difference;
+  transition: transform 0.1s ease;
+}
+
+/* Text Reveal Animation */
+.text-reveal {
+  clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+  transform: translateY(20px);
+  transition: all 1s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.text-reveal.active {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  transform: translateY(0);
+}
+
+/* Button Shimmer */
+.shimmer-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer-btn::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+  transform: rotate(45deg);
+  transition: 0.5s;
+}
+
+.shimmer-btn:hover::after {
+  left: 100%;
+}
