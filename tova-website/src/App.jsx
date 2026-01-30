@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Sun, Moon, ArrowRight, Code, Shield, Zap, Globe, Cpu, Layout, X, CheckCircle2, Github, Linkedin, Mail, ExternalLink, Terminal, Users, Database, Smartphone, BarChart3, Binary, Search, PenTool, Rocket, Layers, Quote, Star, Plus, Minus, Send, User, Sparkles, Twitter, Instagram, Menu, Play, Wrench } from 'lucide-react';
+import { submitContactForm } from './api';
 
 export default function App() {
   const [lang, setLang] = useState('AM');
@@ -10,6 +11,8 @@ export default function App() {
   const [showSuccess, setShowSuccess] = useState(false);
   const [activeFaq, setActiveFaq] = useState(null);
   const [newsletterSubscribed, setNewsletterSubscribed] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formError, setFormError] = useState('');
   const canvasRef = useRef(null);
 
   const navIds = ["Projects", "Process", "Team", "FAQ", "About"];
@@ -161,11 +164,31 @@ export default function App() {
     document.documentElement.setAttribute('data-theme', newTheme);
   };
 
-  const handleBooking = (e) => {
+  const handleBooking = async (e) => {
     e.preventDefault();
-    setShowBooking(false);
-    setShowSuccess(true);
-    setTimeout(() => setShowSuccess(false), 4000);
+    setIsSubmitting(true);
+    setFormError('');
+
+    try {
+      const formData = {
+        fullName: e.target.elements[0].value,
+        companyName: e.target.elements[1].value,
+        email: e.target.elements[2].value,
+        phone: e.target.elements[3].value,
+        message: e.target.elements[4].value,
+      };
+
+      await submitContactForm(formData);
+
+      setShowBooking(false);
+      setShowSuccess(true);
+      setTimeout(() => setShowSuccess(false), 4000);
+      e.target.reset();
+    } catch (error) {
+      setFormError(error.message || 'Failed to send message. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -412,16 +435,23 @@ export default function App() {
               </div>
             ) : (
               <form onSubmit={handleBooking} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                {formError && (
+                  <div style={{ padding: '12px', background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.3)', borderRadius: '8px', color: '#ef4444', fontSize: '0.9rem' }}>
+                    {formError}
+                  </div>
+                )}
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                  <input placeholder="Full Name" className="input-field" required style={{ marginBottom: 0 }} />
-                  <input placeholder="Company Name" className="input-field" style={{ marginBottom: 0 }} />
+                  <input placeholder="Full Name" className="input-field" required style={{ marginBottom: 0 }} disabled={isSubmitting} />
+                  <input placeholder="Company Name" className="input-field" style={{ marginBottom: 0 }} disabled={isSubmitting} />
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                  <input type="email" placeholder="Email Address" className="input-field" required style={{ marginBottom: 0 }} />
-                  <input type="tel" placeholder="Phone Number" className="input-field" required style={{ marginBottom: 0 }} />
+                  <input type="email" placeholder="Email Address" className="input-field" required style={{ marginBottom: 0 }} disabled={isSubmitting} />
+                  <input type="tel" placeholder="Phone Number" className="input-field" required style={{ marginBottom: 0 }} disabled={isSubmitting} />
                 </div>
-                <textarea placeholder="Project Details & Requirements..." className="input-field" style={{ height: '120px', marginBottom: 0 }} required />
-                <button className="btn btn-primary" style={{ marginTop: '8px' }}>{lang === 'EN' ? 'Send Message' : 'መልዕክት ይላኩ'}</button>
+                <textarea placeholder="Project Details & Requirements..." className="input-field" style={{ height: '120px', marginBottom: 0 }} required disabled={isSubmitting} />
+                <button className="btn btn-primary" style={{ marginTop: '8px' }} disabled={isSubmitting}>
+                  {isSubmitting ? (lang === 'EN' ? 'Sending...' : 'በመላክ ላይ...') : (lang === 'EN' ? 'Send Message' : 'መልዕክት ይላኩ')}
+                </button>
               </form>
             )}
           </div>
