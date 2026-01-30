@@ -31,12 +31,25 @@ app.use(express.json());
 
 // Configure nodemailer transporter
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true, // use SSL
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
-  }
+  },
+  // Add timeouts to transport level
+  connectionTimeout: 10000,
+  greetingTimeout: 10000,
+  socketTimeout: 10000
 });
+
+// Debug logs to verify environment variables are loaded in Render
+console.log('--- Backend Environment Check ---');
+console.log('EMAIL_USER exists:', !!process.env.EMAIL_USER);
+console.log('EMAIL_PASS exists:', !!process.env.EMAIL_PASS);
+console.log('EMAIL_TO exists:', !!process.env.EMAIL_TO);
+console.log('---------------------------------');
 
 // Routes
 app.get('/api/health', (req, res) => {
@@ -82,10 +95,10 @@ app.post('/api/contact', async (req, res) => {
     console.log('===================================');
 
     // Skip email sending for now - uncomment below when email is configured
-    
+
     try {
       const emailPromise = transporter.sendMail(mailOptions);
-      const timeoutPromise = new Promise((_, reject) => 
+      const timeoutPromise = new Promise((_, reject) =>
         setTimeout(() => reject(new Error('Email timeout')), 10000)
       );
       await Promise.race([emailPromise, timeoutPromise]);
@@ -93,7 +106,7 @@ app.post('/api/contact', async (req, res) => {
     } catch (emailError) {
       console.error('Email sending failed:', emailError.message);
     }
-    
+
 
     // Return success immediately
     res.json({
