@@ -82,7 +82,7 @@ app.post('/api/contact', async (req, res) => {
     console.log('===================================');
 
     // Skip email sending for now - uncomment below when email is configured
-    /*
+    
     try {
       const emailPromise = transporter.sendMail(mailOptions);
       const timeoutPromise = new Promise((_, reject) => 
@@ -93,7 +93,7 @@ app.post('/api/contact', async (req, res) => {
     } catch (emailError) {
       console.error('Email sending failed:', emailError.message);
     }
-    */
+    
 
     // Return success immediately
     res.json({
