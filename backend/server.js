@@ -32,16 +32,21 @@ app.use(express.json());
 // Configure nodemailer transporter
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
-  port: 465,
-  secure: true, // use SSL
+  port: 587,
+  secure: false, // use STARTTLS
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
   },
-  // Add timeouts to transport level
-  connectionTimeout: 10000,
-  greetingTimeout: 10000,
-  socketTimeout: 10000
+  // Enable debug logs in the terminal
+  logger: true,
+  debug: true,
+  tls: {
+    rejectUnauthorized: false // Helps in some cloud environments
+  },
+  connectionTimeout: 15000,
+  greetingTimeout: 15000,
+  socketTimeout: 15000
 });
 
 // Debug logs to verify environment variables are loaded in Render
