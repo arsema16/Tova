@@ -31,25 +31,21 @@ app.use(express.json());
 
 // Configure nodemailer transporter
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  host: 'smtp.sendgrid.net',
+  port: 587,
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  },
-  // Higher timeouts and clear SSL config
-  connectionTimeout: 20000,
-  greetingTimeout: 20000,
-  socketTimeout: 20000,
-  secure: true
+    user: 'apikey', // This is literal string 'apikey'
+    pass: process.env.SENDGRID_API_KEY
+  }
 });
 
-// Direct debug to see if transporter is created
+// Verify connection on startup
 transporter.verify(function (error, success) {
   if (error) {
-    console.log('--- SMTP Connection Verify Failed ---');
-    console.log(error);
+    console.log('--- SendGrid Connection Failed ---');
+    console.log(error.message);
   } else {
-    console.log('--- SMTP Connection Verified Successfully ---');
+    console.log('--- SendGrid Ready to Send ---');
   }
 });
 
@@ -78,10 +74,11 @@ app.post('/api/contact', async (req, res) => {
       });
     }
 
-    // Email content
+    // Verify Sender Identity (SendGrid requirement)
     const mailOptions = {
-      from: process.env.EMAIL_USER,
+      from: process.env.EMAIL_USER, // This MUST be your verified SendGrid sender
       to: process.env.EMAIL_TO,
+      replyTo: email, // So you can reply directly to the visitor
       subject: `New Contact Form Submission from ${fullName}`,
       html: `
         <h2>New Contact Form Submission</h2>
@@ -94,14 +91,8 @@ app.post('/api/contact', async (req, res) => {
       `
     };
 
-    // Log contact form submission (email disabled for now)
-    console.log('=== NEW CONTACT FORM SUBMISSION ===');
-    console.log('Name:', fullName);
-    console.log('Company:', companyName || 'N/A');
-    console.log('Email:', email);
-    console.log('Phone:', phone);
-    console.log('Message:', message);
-    console.log('===================================');
+    console.log('--- Processing Form Submission ---');
+    console.log(`From: ${fullName} (${email})`);
 
     // Skip email sending for now - uncomment below when email is configured
 
