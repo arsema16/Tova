@@ -72,16 +72,35 @@ app.post('/api/contact', async (req, res) => {
       `
     };
 
-    // Send email
-    await transporter.sendMail(mailOptions);
+    // Send email with timeout
+    try {
+      // Set a timeout for email sending (10 seconds)
+      const emailPromise = transporter.sendMail(mailOptions);
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Email timeout')), 10000)
+      );
 
+      await Promise.race([emailPromise, timeoutPromise]);
+
+      console.log('Email sent successfully to:', process.env.EMAIL_TO);
+    } catch (emailError) {
+      // Log email error but don't fail the request
+      console.error('Email sending failed:', emailError.message);
+
+      // If email credentials are not configured, just log the submission
+      if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS || !process.env.EMAIL_TO) {
+        console.log('Email not configured. Contact form data:', { fullName, companyName, email, phone, message });
+      }
+    }
+
+    // Always return success to user, even if email fails
     res.json({
       success: true,
       message: 'Your message has been sent successfully!'
     });
 
   } catch (error) {
-    console.error('Error sending email:', error);
+    console.error('Error processing contact form:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to send message. Please try again later.'
