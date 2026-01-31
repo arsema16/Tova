@@ -27,25 +27,27 @@ app.use(express.json());
 
 // Helper to send email via Web3Forms API
 async function sendEmailViaWeb3Forms(formData) {
-  console.log('Attempting to send email via Web3Forms API...');
+  console.log('Attempting to send email via Web3Forms (URL-encoded)...');
+
+  const params = new URLSearchParams();
+  params.append('access_key', process.env.WEB3FORMS_ACCESS_KEY);
+  params.append('from_name', formData.fullName);
+  params.append('subject', `New Tova Contact: ${formData.fullName}`);
+  params.append('name', formData.fullName);
+  params.append('email', formData.email);
+  params.append('phone', formData.phone);
+  params.append('company', formData.companyName || 'N/A');
+  params.append('message', formData.message);
 
   const response = await fetch('https://api.web3forms.com/submit', {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/x-www-form-urlencoded',
       'Accept': 'application/json',
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      'Referer': 'https://tova-kgvz.vercel.app/'
     },
-    body: JSON.stringify({
-      access_key: process.env.WEB3FORMS_ACCESS_KEY,
-      from_name: formData.fullName,
-      subject: `New Tova Contact: ${formData.fullName}`,
-      name: formData.fullName,
-      email: formData.email,
-      phone: formData.phone,
-      company: formData.companyName || 'N/A',
-      message: formData.message
-    })
+    body: params
   });
 
   const contentType = response.headers.get('content-type');
@@ -60,7 +62,7 @@ async function sendEmailViaWeb3Forms(formData) {
     const text = await response.text();
     console.error('Web3Forms Status:', response.status);
     console.error('Web3Forms Raw Response (First 500 chars):', text.substring(0, 500));
-    throw new Error(`Web3Forms returned non-JSON response (Status: ${response.status}). This is likely Cloudflare blocking the server request.`);
+    throw new Error(`Web3Forms returned non-JSON response (Status: ${response.status}). Cloudflare is still blocking the request.`);
   }
 }
 
