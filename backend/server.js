@@ -30,29 +30,39 @@ app.use(cors({
 app.use(express.json());
 
 // Configure nodemailer transporter
-const transporter = nodemailer.createTransport({
-  host: 'smtp.sendgrid.net',
-  port: 587,
-  auth: {
-    user: 'apikey', // This is literal string 'apikey'
-    pass: process.env.SENDGRID_API_KEY
-  }
-});
+// Helper to send email via SendGrid HTTP API
+async function sendEmailViaSendGrid(mailOptions) {
+  const response = await fetch('https://api.sendgrid.com/v3/mail/send', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${process.env.SENDGRID_API_KEY}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      personalizations: [{
+        to: [{ email: mailOptions.to }]
+      }],
+      from: { email: mailOptions.from },
+      reply_to: { email: mailOptions.replyTo },
+      subject: mailOptions.subject,
+      content: [{
+        type: 'text/html',
+        value: mailOptions.html
+      }]
+    })
+  });
 
-// Verify connection on startup
-transporter.verify(function (error, success) {
-  if (error) {
-    console.log('--- SendGrid Connection Failed ---');
-    console.log(error.message);
-  } else {
-    console.log('--- SendGrid Ready to Send ---');
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(JSON.stringify(errorData));
   }
-});
+  return true;
+}
 
 // Debug logs to verify environment variables are loaded in Render
 console.log('--- Backend Environment Check ---');
+console.log('SENDGRID_API_KEY exists:', !!process.env.SENDGRID_API_KEY);
 console.log('EMAIL_USER exists:', !!process.env.EMAIL_USER);
-console.log('EMAIL_PASS exists:', !!process.env.EMAIL_PASS);
 console.log('EMAIL_TO exists:', !!process.env.EMAIL_TO);
 console.log('---------------------------------');
 
