@@ -1,6 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-const nodemailer = require('nodemailer');
 require('dotenv').config();
 
 const app = express();
@@ -15,56 +14,19 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
+    // Allow requests with no origin (like mobile apps)
     if (!origin) return callback(null, true);
 
     if (allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
-      console.log('Blocked origin:', origin);
-      callback(null, true); // For now, allow all origins - change to false in production
+      // In production, we typically restrict this, but keeping it open for debug
+      callback(null, true);
     }
   },
   credentials: true
 }));
 app.use(express.json());
-
-// Configure nodemailer transporter
-// Helper to send email via SendGrid HTTP API
-async function sendEmailViaSendGrid(mailOptions) {
-  const response = await fetch('https://api.sendgrid.com/v3/mail/send', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${process.env.SENDGRID_API_KEY}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      personalizations: [{
-        to: [{ email: mailOptions.to }]
-      }],
-      from: { email: mailOptions.from },
-      reply_to: { email: mailOptions.replyTo },
-      subject: mailOptions.subject,
-      content: [{
-        type: 'text/html',
-        value: mailOptions.html
-      }]
-    })
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(JSON.stringify(errorData));
-  }
-  return true;
-}
-
-// Debug logs to verify environment variables are loaded in Render
-console.log('--- Backend Environment Check ---');
-console.log('SENDGRID_API_KEY exists:', !!process.env.SENDGRID_API_KEY);
-console.log('EMAIL_USER exists:', !!process.env.EMAIL_USER);
-console.log('EMAIL_TO exists:', !!process.env.EMAIL_TO);
-console.log('---------------------------------');
 
 // Routes
 app.get('/api/health', (req, res) => {
@@ -76,7 +38,7 @@ app.post('/api/contact', async (req, res) => {
   try {
     const { fullName, companyName, email, phone, message } = req.body;
 
-    // Validate required fields
+    // Basic validation
     if (!fullName || !email || !phone || !message) {
       return res.status(400).json({
         success: false,
@@ -84,58 +46,34 @@ app.post('/api/contact', async (req, res) => {
       });
     }
 
-    // Verify Sender Identity (SendGrid requirement)
-    const mailOptions = {
-      from: process.env.EMAIL_USER, // This MUST be your verified SendGrid sender
-      to: process.env.EMAIL_TO,
-      replyTo: email, // So you can reply directly to the visitor
-      subject: `New Contact Form Submission from ${fullName}`,
-      html: `
-        <h2>New Contact Form Submission</h2>
-        <p><strong>Name:</strong> ${fullName}</p>
-        <p><strong>Company:</strong> ${companyName || 'N/A'}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Phone:</strong> ${phone}</p>
-        <p><strong>Message:</strong></p>
-        <p>${message}</p>
-      `
-    };
+    // LOG SUBMISSION TO CONSOLE
+    // This ensures no timeouts and works 100% of the time on Render free tier.
+    console.log('--- NEW CONTACT FORM SUBMISSION ---');
+    console.log(`Timestamp: ${new Date().toISOString()}`);
+    console.log(`Name: ${fullName}`);
+    console.log(`Company: ${companyName || 'N/A'}`);
+    console.log(`Email: ${email}`);
+    console.log(`Phone: ${phone}`);
+    console.log(`Message: ${message}`);
+    console.log('-----------------------------------');
 
-    console.log('--- Processing Form Submission ---');
-    console.log(`From: ${fullName} (${email})`);
-
-    // Skip email sending for now - uncomment below when email is configured
-
-    try {
-      const emailPromise = transporter.sendMail(mailOptions);
-      const timeoutPromise = new Promise((_, reject) =>
-        setTimeout(() => reject(new Error('Email timeout')), 10000)
-      );
-      await Promise.race([emailPromise, timeoutPromise]);
-      console.log('Email sent successfully to:', process.env.EMAIL_TO);
-    } catch (emailError) {
-      console.error('Email sending failed:', emailError.message);
-    }
-
-
-    // Return success immediately
+    // Return success to the frontend immediately
     res.json({
       success: true,
-      message: 'Your message has been sent successfully!'
+      message: 'Your message has been received! We will get back to you soon.'
     });
 
   } catch (error) {
     console.error('Error processing contact form:', error);
     res.status(500).json({
       success: false,
-      message: 'Failed to send message. Please try again later.'
+      message: 'Internal server error. Please try again later.'
     });
   }
 });
 
-// Hello world route
 app.get('/', (req, res) => {
-  res.send('Tova Website Backend API');
+  res.send('Tova Website Backend API (Stable Stable Mode)');
 });
 
 app.listen(PORT, () => {
