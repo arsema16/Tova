@@ -27,6 +27,8 @@ app.use(express.json());
 
 // Helper to send email via Web3Forms API
 async function sendEmailViaWeb3Forms(formData) {
+  console.log('Using Web3Forms Access Key:', process.env.WEB3FORMS_ACCESS_KEY ? 'Set' : 'NOT SET');
+
   const response = await fetch('https://api.web3forms.com/submit', {
     method: 'POST',
     headers: {
@@ -35,26 +37,28 @@ async function sendEmailViaWeb3Forms(formData) {
     },
     body: JSON.stringify({
       access_key: process.env.WEB3FORMS_ACCESS_KEY,
-      subject: `New Tova Contact: ${formData.fullName}`,
       from_name: formData.fullName,
+      subject: `New Tova Contact: ${formData.fullName}`,
+      name: formData.fullName,
       email: formData.email,
-      message: `
-        Name: ${formData.fullName}
-        Company: ${formData.companyName || 'N/A'}
-        Email: ${formData.email}
-        Phone: ${formData.phone}
-        
-        Message:
-        ${formData.message}
-      `
+      phone: formData.phone,
+      company: formData.companyName || 'N/A',
+      message: formData.message
     })
   });
 
-  const result = await response.json();
-  if (!result.success) {
-    throw new Error(result.message || 'Web3Forms API Error');
+  const contentType = response.headers.get('content-type');
+  if (contentType && contentType.includes('application/json')) {
+    const result = await response.json();
+    if (!result.success) {
+      throw new Error(result.message || 'Web3Forms API Error');
+    }
+    return result;
+  } else {
+    const text = await response.text();
+    console.error('Web3Forms Non-JSON Response:', text.substring(0, 200));
+    throw new Error(`Web3Forms returned non-JSON response (Status: ${response.status})`);
   }
-  return result;
 }
 
 // Routes
