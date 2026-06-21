@@ -402,9 +402,9 @@ export default function App() {
           </h2>
           <p style={{ maxWidth: '700px', fontSize: '1.1rem' }}>
             {lang === 'EN'
-              ? "Founded in 2026, Tova has quickly become a beacon of technical excellence in East Africa. We don't just build apps; we engineer resilient ecosystems that empower businesses to thrive in the digital age."
-              : "እ.ኤ.አ. በ 2026 የተመሰረተው ቶቫ በአጭር ጊዜ ውስጥ በምስራቅ አፍሪካ የቴክኖሎጂ ብቃት ማረጋገጫ ሆኗል። እኛ መተግበሪያዎችን ብቻ አንሰራም፤ የንግድ ድርጅቶች በዲጂታል ዘመን እንዲበለጽጉ የሚያስችሉ ጠንካራ ስርዓቶችን እንገነባለን።"}
-          </p>
+      ? "We started in 2026 with a simple goal: to build software that actually works for businesses in Ethiopia. We focus on creating reliable, maintainable systems that help our clients run their operations better. No overpromising, just solid engineering and honest work."
+      : "እኛ በ2026 ቀላል ግብ ይዘን ተጀመርን፤ በኢትዮጵያ ለሚገኙ ንግዶች በልዩ መልክ የሚሰራ ሶፍትዌር በመገንባት፤ ደንበኞቻችን ስራቸውን በተሻለ ሁኔታ እንዲያከናውኑ የሚረዱ አስተማማኝ እና ዘላቂ ስርዓቶችን ለመፍጠር እንጥራለን። ከአቅም በላይ ቃል አንገባም፣ ጠንካራ ምህንድስና እና ቅን ስራ ብቻ እንጂ።"}
+      </p>
         </section>
 
         {/* --- PROJECTS --- */}
