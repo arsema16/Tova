@@ -74,8 +74,7 @@ export default function App() {
           desc: "Connects users with pharmacies for real-time chat and prescription management.", 
           icon: <Smartphone size={24} />, 
           video: "https://drive.google.com/file/d/1pyfv8ZwSmbsl_G4zSv_cW2rSlR3YqIsm/preview",
-          link: "https://medavor.com"
-        },
+        link : null},
         { 
           title: "Nexo Mobile App", 
           cat: "Service", 
@@ -158,8 +157,7 @@ export default function App() {
           desc: "ተጠቃሚዎችን ከመድኃኒት ቤቶች ጋር የሚያገናኝ እና የሐኪም ማዘዣዎችን ለማየት የሚያስችል መተግበሪያ።", 
           icon: <Smartphone size={24} />, 
           video: "https://drive.google.com/file/d/1pyfv8ZwSmbsl_G4zSv_cW2rSlR3YqIsm/preview",
-          link: "https://medavor.com"
-        },
+        link: null},
         { 
           title: "ኔክሶ መተግበሪያ", 
           cat: "አገልግሎት", 
@@ -410,14 +408,13 @@ export default function App() {
         </section>
 
         {/* --- PROJECTS --- */}
-        {/* --- PROJECTS --- */}
 <section id="Projects" style={{ padding: '100px 0' }}>
   <h2 style={{ fontSize: '2.5rem', marginBottom: '60px' }}>{t.galleryTitle}</h2>
   <div className="card-grid">
     {t.projects.map((proj, idx) => (
       <div key={idx} className="glass-card">
-        {/* Website Preview - Full width iframe */}
-        {proj.link && (
+        {/* Website Preview - Only show if link exists */}
+        {proj.link ? (
           <a 
             href={proj.link} 
             target="_blank" 
@@ -483,31 +480,42 @@ export default function App() {
               </div>
             </div>
             
-            {/* Website Preview - Full page with zoom out */}
-            <div style={{
-              width: '100%',
-              height: '100%',
-              marginTop: '32px',
-              overflow: 'hidden',
-              position: 'relative'
-            }}>
-              <iframe
-                src={proj.link}
-                style={{
-                  width: '100%',
-                  height: '800px', // Tall enough to show full page
-                  border: 'none',
-                  transform: 'scale(0.25)', // Zoom out to show full page
-                  transformOrigin: 'top left',
-                  width: '400%', // Compensate for scale
-                  height: '800px',
-                  pointerEvents: 'none'
-                }}
-                title={`${proj.title} website preview`}
-                loading="lazy"
-                sandbox="allow-scripts allow-same-origin"
-              />
-            </div>
+            {/* Full Page Screenshot using Microlink */}
+            <img
+              src={`https://api.microlink.io/?url=${encodeURIComponent(proj.link)}&screenshot=true&meta=false&embed=screenshot.url&viewport=desktop`}
+              alt={`${proj.title} website preview`}
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                objectPosition: 'top',
+                marginTop: '32px'
+              }}
+              loading="lazy"
+              onError={(e) => {
+                // Fallback if screenshot fails
+                e.target.style.display = 'none';
+                const fallback = document.createElement('div');
+                fallback.style.cssText = `
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                  justify-content: center;
+                  height: calc(100% - 32px);
+                  margin-top: 32px;
+                  color: var(--text-muted);
+                `;
+                fallback.innerHTML = `
+                  <div style="font-size: 2.5rem; margin-bottom: 8px; opacity: 0.3;">${proj.icon.props.children}</div>
+                  <div style="font-size: 0.85rem; font-weight: 600;">${proj.title}</div>
+                  <div style="font-size: 0.7rem; display: flex; align-items: center; gap: 4px; margin-top: 4px; color: var(--primary);">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    Click to visit
+                  </div>
+                `;
+                e.target.parentElement.appendChild(fallback);
+              }}
+            />
             
             {/* Overlay */}
             <div style={{
@@ -520,6 +528,69 @@ export default function App() {
               cursor: 'pointer'
             }} />
           </a>
+        ) : (
+          /* If no website link, show a placeholder */
+          <div style={{ 
+            marginBottom: '20px', 
+            borderRadius: '12px', 
+            overflow: 'hidden',
+            border: '1px solid var(--border)',
+            background: 'var(--bg)',
+            height: '220px',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            position: 'relative'
+          }}>
+            <div style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              height: '32px',
+              background: 'var(--glass)',
+              borderBottom: '1px solid var(--border)',
+              display: 'flex',
+              alignItems: 'center',
+              padding: '0 12px',
+              gap: '6px',
+              zIndex: 2
+            }}>
+              <div style={{ display: 'flex', gap: '4px' }}>
+                <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#ff5f57' }}></span>
+                <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#ffbd2e' }}></span>
+                <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#28c840' }}></span>
+              </div>
+              <div style={{ 
+                flex: 1, 
+                textAlign: 'center', 
+                fontSize: '0.6rem', 
+                color: 'var(--text-muted)',
+                background: 'var(--bg)',
+                padding: '2px 12px',
+                borderRadius: '4px',
+                margin: '0 8px'
+              }}>
+                Coming Soon
+              </div>
+            </div>
+            <div style={{ 
+              marginTop: '32px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flex: 1
+            }}>
+              <div style={{ fontSize: '3rem', marginBottom: '8px', opacity: 0.3 }}>
+                {proj.icon}
+              </div>
+              <div style={{ fontSize: '0.85rem', fontWeight: '600', color: 'var(--text-muted)' }}>
+                Website Coming Soon
+              </div>
+            </div>
+          </div>
         )}
         
         <div style={{ padding: '12px', background: 'var(--glass)', borderRadius: '12px', width: 'fit-content', marginBottom: '24px', color: 'var(--primary)' }}>{proj.icon}</div>
@@ -529,7 +600,7 @@ export default function App() {
         
         {/* Buttons */}
         <div style={{ display: 'flex', gap: '12px', marginTop: '24px', flexWrap: 'wrap' }}>
-          {proj.link && (
+          {proj.link ? (
             <a
               href={proj.link}
               target="_blank"
@@ -547,6 +618,21 @@ export default function App() {
             >
               <ExternalLink size={18} /> Visit Website
             </a>
+          ) : (
+            <button
+              className="btn btn-ghost"
+              style={{ 
+                flex: 1, 
+                justifyContent: 'center',
+                border: '1px solid var(--border)',
+                minWidth: '120px',
+                opacity: 0.5,
+                cursor: 'not-allowed'
+              }}
+              disabled
+            >
+              <ExternalLink size={18} /> No Website
+            </button>
           )}
           
           <button
