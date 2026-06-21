@@ -82,7 +82,7 @@ export default function App() {
           desc: "Connects users with mobile & PC technicians for real-time troubleshooting.", 
           icon: <Wrench size={24} />, 
           video: "https://drive.google.com/file/d/1RaZq7XkxiCQJREbfgMwI5leO8YJa6Ih-/preview",
-          link: "https://nexoapp.com"
+          link: "https://nexo-7ded5.web.app/"
         },
         {
           title: "School Inspection System",
@@ -166,7 +166,7 @@ export default function App() {
           desc: "ተጠቃሚዎችን ከሞባይል እና ኮምፒውተር ባለሙያዎች ጋር የሚያገናኝ መተግበሪያ።", 
           icon: <Wrench size={24} />, 
           video: "https://drive.google.com/file/d/1RaZq7XkxiCQJREbfgMwI5leO8YJa6Ih-/preview",
-          link: "https://nexoapp.com"
+          link: "https://nexo-7ded5.web.app/"
         },
         {
           title: "የትምህርት ቤት ቁጥጥር ስርዓት",
