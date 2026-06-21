@@ -1,5 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Sun, Moon, ArrowRight, Code, Shield, Zap, Globe, Cpu, Layout, X, CheckCircle2, Github, Linkedin, Mail, ExternalLink, Terminal, Users, Database, Smartphone, BarChart3, Binary, Search, PenTool, Rocket, Layers, Quote, Star, Plus, Minus, Send, User, Sparkles, Twitter, Instagram, Menu, Play, Wrench } from 'lucide-react';
+import { 
+  Sun, Moon, ArrowRight, Code, Shield, Zap, Globe, Cpu, Layout, X, 
+  CheckCircle2, Github, Linkedin, Mail, ExternalLink, Terminal, Users, 
+  Database, Smartphone, BarChart3, Binary, Search, PenTool, Rocket, Layers, 
+  Quote, Star, Plus, Minus, Send, User, Sparkles, Twitter, Instagram, Menu, 
+  Play, Wrench, ShoppingCart, Sprout, Wallet, BookOpen, Clipboard 
+} from 'lucide-react';
 import { submitContactForm } from './api';
 
 export default function App() {
@@ -62,8 +68,38 @@ export default function App() {
       newsSuccess: "Welcome to the loop!",
       galleryTitle: "Our Current Projects",
       projects: [
-        { title: "Medavor Mobile App", cat: "Health", desc: "Connects users with pharmacies for real-time chat and prescription management.", icon: <Smartphone size={24} />, video: "https://drive.google.com/file/d/1pyfv8ZwSmbsl_G4zSv_cW2rSlR3YqIsm/preview" },
-        { title: "Nexo Mobile App", cat: "Service", desc: "Connects users with mobile & PC technicians for real-time troubleshooting.", icon: <Wrench size={24} />, video: "https://drive.google.com/file/d/1RaZq7XkxiCQJREbfgMwI5leO8YJa6Ih-/preview" }
+        { 
+          title: "Medavor Mobile App", 
+          cat: "Health", 
+          desc: "Connects users with pharmacies for real-time chat and prescription management.", 
+          icon: <Smartphone size={24} />, 
+          video: "https://drive.google.com/file/d/1pyfv8ZwSmbsl_G4zSv_cW2rSlR3YqIsm/preview",
+          link: "https://medavor.com"
+        },
+        { 
+          title: "Nexo Mobile App", 
+          cat: "Service", 
+          desc: "Connects users with mobile & PC technicians for real-time troubleshooting.", 
+          icon: <Wrench size={24} />, 
+          video: "https://drive.google.com/file/d/1RaZq7XkxiCQJREbfgMwI5leO8YJa6Ih-/preview",
+          link: "https://nexoapp.com"
+        },
+        {
+          title: "School Inspection System",
+          cat: "EdTech",
+          desc: "A comprehensive digital platform for education quality assurance, enabling streamlined school evaluations, compliance tracking, and performance reporting.",
+          icon: <Clipboard size={24} />,
+          video: "https://drive.google.com/file/d/YOUR_VIDEO_ID_3/preview",
+          link: "https://schoolinspectionsystem-production-29e7.up.railway.app/"
+        },
+        {
+          title: "Academia Connect",
+          cat: "Education",
+          desc: "A unified school management platform with AI-powered study coach, gamification, real-time messaging, and dedicated portals for students, teachers, parents, and administrators.",
+          icon: <BookOpen size={24} />,
+          video: "https://drive.google.com/file/d/YOUR_VIDEO_ID_4/preview",
+          link: "https://acadamia-connect-production-0cab.up.railway.app"
+        }
       ],
       footer: {
         tagline: "Building the digital backbone of modern enterprises.",
@@ -116,8 +152,38 @@ export default function App() {
       newsSuccess: "በተሳካ ሁኔታ ተመዝግበዋል!",
       galleryTitle: "የአሁኑ ፕሮጀክቶቻችን",
       projects: [
-        { title: "ሜዳቮር መተግበሪያ", cat: "ጤና", desc: "ተጠቃሚዎችን ከመድኃኒት ቤቶች ጋር የሚያገናኝ እና የሐኪም ማዘዣዎችን ለማየት የሚያስችል መተግበሪያ።", icon: <Smartphone size={24} />, video: "https://drive.google.com/file/d/1pyfv8ZwSmbsl_G4zSv_cW2rSlR3YqIsm/preview" },
-        { title: "ኔክሶ መተግበሪያ", cat: "አገልግሎት", desc: "ተጠቃሚዎችን ከሞባይል እና ኮምፒውተር ባለሙያዎች ጋር የሚያገናኝ መተግበሪያ።", icon: <Wrench size={24} />, video: "https://drive.google.com/file/d/1RaZq7XkxiCQJREbfgMwI5leO8YJa6Ih-/preview" }
+        { 
+          title: "ሜዳቮር መተግበሪያ", 
+          cat: "ጤና", 
+          desc: "ተጠቃሚዎችን ከመድኃኒት ቤቶች ጋር የሚያገናኝ እና የሐኪም ማዘዣዎችን ለማየት የሚያስችል መተግበሪያ።", 
+          icon: <Smartphone size={24} />, 
+          video: "https://drive.google.com/file/d/1pyfv8ZwSmbsl_G4zSv_cW2rSlR3YqIsm/preview",
+          link: "https://medavor.com"
+        },
+        { 
+          title: "ኔክሶ መተግበሪያ", 
+          cat: "አገልግሎት", 
+          desc: "ተጠቃሚዎችን ከሞባይል እና ኮምፒውተር ባለሙያዎች ጋር የሚያገናኝ መተግበሪያ።", 
+          icon: <Wrench size={24} />, 
+          video: "https://drive.google.com/file/d/1RaZq7XkxiCQJREbfgMwI5leO8YJa6Ih-/preview",
+          link: "https://nexoapp.com"
+        },
+        {
+          title: "የትምህርት ቤት ቁጥጥር ስርዓት",
+          cat: "ትምህርታዊ ቴክኖሎጂ",
+          desc: "የትምህርት ጥራት ማረጋገጫ ዲጂታል መድረክ፣ የትምህርት ቤቶችን ምዘና፣ ደንቦችን መከታተል እና የአፈጻጸም ሪፖርት የሚያቀርብ።",
+          icon: <Clipboard size={24} />,
+          video: "https://drive.google.com/file/d/YOUR_VIDEO_ID_3/preview",
+          link: "https://schoolinspectionsystem-production-29e7.up.railway.app/"
+        },
+        {
+          title: "አካዳሚያ ኮኔክት",
+          cat: "ትምህርት",
+          desc: "የተቀናጀ የትምህርት ቤት አስተዳደር መድረክ ከ AI የጥናት አሰልጣኝ፣ የጨዋታ ሽልማት ስርዓት፣ የቅጽበት መልዕክት እና ለተማሪዎች፣ መምህራን፣ ወላጆች እና አስተዳዳሪዎች የተለዩ መግቢያዎች ያሉት።",
+          icon: <BookOpen size={24} />,
+          video: "https://drive.google.com/file/d/YOUR_VIDEO_ID_4/preview",
+          link: "https://acadamia-connect-production-0cab.up.railway.app"
+        }
       ],
       footer: {
         tagline: "ለዘመናዊ ድርጅቶች የዲጂታል የጀርባ አጥንት እንገነባለን።",
@@ -344,26 +410,162 @@ export default function App() {
         </section>
 
         {/* --- PROJECTS --- */}
-        <section id="Projects" style={{ padding: '100px 0' }}>
-          <h2 style={{ fontSize: '2.5rem', marginBottom: '60px' }}>{t.galleryTitle}</h2>
-          <div className="card-grid">
-            {t.projects.map((proj, idx) => (
-              <div key={idx} className="glass-card">
-                <div style={{ padding: '12px', background: 'var(--glass)', borderRadius: '12px', width: 'fit-content', marginBottom: '24px', color: 'var(--primary)' }}>{proj.icon}</div>
-                <span style={{ fontSize: '0.75rem', fontWeight: '700', letterSpacing: '1px', color: 'var(--accent)', textTransform: 'uppercase' }}>{proj.cat}</span>
-                <h3 style={{ fontSize: '1.5rem', margin: '12px 0' }}>{proj.title}</h3>
-                <p>{proj.desc}</p>
-                <button
-                  onClick={() => setActiveVideo(proj.video)}
-                  className="btn btn-primary"
-                  style={{ marginTop: '24px', width: '100%', justifyContent: 'center' }}
-                >
-                  <Play size={18} fill="currentColor" /> Watch Demo
-                </button>
+        {/* --- PROJECTS --- */}
+<section id="Projects" style={{ padding: '100px 0' }}>
+  <h2 style={{ fontSize: '2.5rem', marginBottom: '60px' }}>{t.galleryTitle}</h2>
+  <div className="card-grid">
+    {t.projects.map((proj, idx) => (
+      <div key={idx} className="glass-card">
+        {/* Website Preview - Full width iframe */}
+        {proj.link && (
+          <a 
+            href={proj.link} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            style={{ 
+              display: 'block', 
+              marginBottom: '20px', 
+              borderRadius: '12px', 
+              overflow: 'hidden',
+              border: '1px solid var(--border)',
+              transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+              position: 'relative',
+              background: 'var(--bg)',
+              height: '220px',
+              textDecoration: 'none'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'scale(1.02)';
+              e.currentTarget.style.boxShadow = '0 8px 30px rgba(59, 130, 246, 0.2)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'scale(1)';
+              e.currentTarget.style.boxShadow = 'none';
+            }}
+          >
+            {/* Browser Chrome */}
+            <div style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              height: '32px',
+              background: 'var(--glass)',
+              borderBottom: '1px solid var(--border)',
+              display: 'flex',
+              alignItems: 'center',
+              padding: '0 12px',
+              gap: '6px',
+              zIndex: 2
+            }}>
+              <div style={{ display: 'flex', gap: '4px' }}>
+                <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#ff5f57' }}></span>
+                <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#ffbd2e' }}></span>
+                <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#28c840' }}></span>
               </div>
-            ))}
-          </div>
-        </section>
+              <div style={{ 
+                flex: 1, 
+                textAlign: 'center', 
+                fontSize: '0.6rem', 
+                color: 'var(--text-muted)',
+                background: 'var(--bg)',
+                padding: '2px 12px',
+                borderRadius: '4px',
+                margin: '0 8px',
+                overflow: 'hidden',
+                whiteSpace: 'nowrap',
+                textOverflow: 'ellipsis'
+              }}>
+                {proj.link.replace(/^https?:\/\//, '').split('/')[0]}
+              </div>
+              <div style={{ width: '12px', height: '12px', opacity: 0.3 }}>
+                <ExternalLink size={12} />
+              </div>
+            </div>
+            
+            {/* Website Preview - Full page with zoom out */}
+            <div style={{
+              width: '100%',
+              height: '100%',
+              marginTop: '32px',
+              overflow: 'hidden',
+              position: 'relative'
+            }}>
+              <iframe
+                src={proj.link}
+                style={{
+                  width: '100%',
+                  height: '800px', // Tall enough to show full page
+                  border: 'none',
+                  transform: 'scale(0.25)', // Zoom out to show full page
+                  transformOrigin: 'top left',
+                  width: '400%', // Compensate for scale
+                  height: '800px',
+                  pointerEvents: 'none'
+                }}
+                title={`${proj.title} website preview`}
+                loading="lazy"
+                sandbox="allow-scripts allow-same-origin"
+              />
+            </div>
+            
+            {/* Overlay */}
+            <div style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              zIndex: 1,
+              cursor: 'pointer'
+            }} />
+          </a>
+        )}
+        
+        <div style={{ padding: '12px', background: 'var(--glass)', borderRadius: '12px', width: 'fit-content', marginBottom: '24px', color: 'var(--primary)' }}>{proj.icon}</div>
+        <span style={{ fontSize: '0.75rem', fontWeight: '700', letterSpacing: '1px', color: 'var(--accent)', textTransform: 'uppercase' }}>{proj.cat}</span>
+        <h3 style={{ fontSize: '1.5rem', margin: '12px 0' }}>{proj.title}</h3>
+        <p>{proj.desc}</p>
+        
+        {/* Buttons */}
+        <div style={{ display: 'flex', gap: '12px', marginTop: '24px', flexWrap: 'wrap' }}>
+          {proj.link && (
+            <a
+              href={proj.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-primary"
+              style={{ 
+                flex: 1, 
+                justifyContent: 'center',
+                textDecoration: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                minWidth: '120px'
+              }}
+            >
+              <ExternalLink size={18} /> Visit Website
+            </a>
+          )}
+          
+          <button
+            onClick={() => setActiveVideo(proj.video)}
+            className="btn btn-ghost"
+            style={{ 
+              flex: 1, 
+              justifyContent: 'center',
+              border: '1px solid var(--border)',
+              minWidth: '120px'
+            }}
+          >
+            <Play size={18} /> Watch Demo
+          </button>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
 
         {/* --- NEWSLETTER --- */}
         <section style={{ padding: '100px 0', display: 'flex', justifyContent: 'center' }}>
@@ -428,7 +630,6 @@ export default function App() {
             </div>
             {showSuccess ? (
               <div style={{ textAlign: 'center', padding: '40px 0' }}>
-                <CheckCircle2 size={64} color="var(--accent)" style={{ margin: '0 auto 24px' }} />
                 <CheckCircle2 size={64} color="var(--accent)" style={{ margin: '0 auto 24px' }} />
                 <h3>Inquiry Received</h3>
                 <p>Our team will review your requirements and respond within 24 hours.</p>
